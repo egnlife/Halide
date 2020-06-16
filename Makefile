@@ -318,6 +318,9 @@ ARCH_FOR_TESTS ?= native
 TEST_CXX_FLAGS ?= $(TUTORIAL_CXX_FLAGS) $(CXX_WARNING_FLAGS) -march=${ARCH_FOR_TESTS}
 TEST_LD_FLAGS = -L$(BIN_DIR) -lHalide $(COMMON_LD_FLAGS)
 
+# In the tests, some of our expectations change depending on the llvm version
+TEST_CXX_FLAGS += -DLLVM_VERSION=$(LLVM_VERSION_TIMES_10)
+
 # gcc 4.8 fires a bogus warning on old versions of png.h
 ifneq (,$(findstring g++,$(CXX_VERSION)))
 ifneq (,$(findstring 4.8,$(CXX_VERSION)))
@@ -1247,7 +1250,7 @@ GENERATOR_AOTWASM_TESTS := $(filter-out generator_aotwasm_memory_profiler_mandel
 test_aotwasm_generator: $(GENERATOR_AOTWASM_TESTS)
 
 # This is just a test to ensure than RunGen builds and links for a critical mass of Generators;
-# not all will work directly (e.g. due to missing define_externs at link time), so we blacklist
+# not all will work directly (e.g. due to missing define_externs at link time), so we disable
 # those known to be broken for plausible reasons.
 GENERATOR_BUILD_RUNGEN_TESTS = $(GENERATOR_EXTERNAL_TEST_GENERATOR:$(ROOT_DIR)/test/generator/%_generator.cpp=$(FILTERS_DIR)/%.rungen)
 GENERATOR_BUILD_RUNGEN_TESTS := $(filter-out $(FILTERS_DIR)/async_parallel.rungen,$(GENERATOR_BUILD_RUNGEN_TESTS))
