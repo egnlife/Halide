@@ -45,7 +45,6 @@ typedef ptrdiff_t ssize_t;
 // Note that WEAK_INLINE should *not* also be `inline`
 #define WEAK_INLINE __attribute__((weak, always_inline))
 
-
 #ifdef BITS_64
 #define INT64_C(c) c##L
 #define UINT64_C(c) c##UL
