@@ -2,7 +2,7 @@
 
 extern "C" {
 
-WEAK_INLINE int halide_profiler_set_current_func(halide_profiler_state *state, int tok, int t) {
+ALWAYS_INLINE int halide_profiler_set_current_func(halide_profiler_state *state, int tok, int t) {
     // Use empty volatile asm blocks to prevent code motion. Otherwise
     // llvm reorders or elides the stores.
     volatile int *ptr = &(state->current_func);
@@ -14,7 +14,7 @@ WEAK_INLINE int halide_profiler_set_current_func(halide_profiler_state *state, i
     return 0;
 }
 
-WEAK_INLINE int halide_profiler_incr_active_threads(halide_profiler_state *state) {
+ALWAYS_INLINE int halide_profiler_incr_active_threads(halide_profiler_state *state) {
     volatile int *ptr = &(state->active_threads);
     // clang-format off
     asm volatile ("":::);
@@ -24,7 +24,7 @@ WEAK_INLINE int halide_profiler_incr_active_threads(halide_profiler_state *state
     return ret;
 }
 
-WEAK_INLINE int halide_profiler_decr_active_threads(halide_profiler_state *state) {
+ALWAYS_INLINE int halide_profiler_decr_active_threads(halide_profiler_state *state) {
     volatile int *ptr = &(state->active_threads);
     // clang-format off
     asm volatile ("":::);

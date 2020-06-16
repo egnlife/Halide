@@ -611,7 +611,7 @@ WEAK __attribute__((constructor)) void register_cuda_allocation_pool() {
     halide_register_device_allocation_pool(&cuda_allocation_pool);
 }
 
-WEAK_INLINE uint64_t quantize_allocation_size(uint64_t sz) {
+ALWAYS_INLINE uint64_t quantize_allocation_size(uint64_t sz) {
     int z = __builtin_clzll(sz);
     if (z < 60) {
         sz--;

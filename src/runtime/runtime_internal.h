@@ -30,13 +30,21 @@ typedef __PTRDIFF_TYPE__ ptrdiff_t;
 typedef ptrdiff_t ssize_t;
 
 #define NULL 0
+
+// In Halide runtime code, WEAK should be used almostly exclusively for
+// functions that are part of the public Halide runtime API.
 #define WEAK __attribute__((weak))
 
+// In Halide runtime code, helper functions that are internal to the runtime
+// should usually be declared ALWAYS_INLINE.
+// Note that ALWAYS_INLINE should *always* also be `inline`.
+#define ALWAYS_INLINE inline __attribute__((always_inline))
+
+// WEAK_INLINE is a special case needed for a few parts of the Halide runtime;
+// in general, it shouldn't ever be used for new functions.
 // Note that WEAK_INLINE should *not* also be `inline`
 #define WEAK_INLINE __attribute__((weak, always_inline))
 
-// Note that ALWAYS_INLINE should *always* also be `inline`
-#define ALWAYS_INLINE inline __attribute__((always_inline))
 
 #ifdef BITS_64
 #define INT64_C(c) c##L
