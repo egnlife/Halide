@@ -32,6 +32,12 @@ typedef ptrdiff_t ssize_t;
 #define NULL 0
 #define WEAK __attribute__((weak))
 
+// Note that WEAK_INLINE should *not* also be `inline`
+#define WEAK_INLINE __attribute__((weak, always_inline))
+
+// Note that ALWAYS_INLINE should *always* also be `inline`
+#define ALWAYS_INLINE inline __attribute__((always_inline))
+
 #ifdef BITS_64
 #define INT64_C(c) c##L
 #define UINT64_C(c) c##UL
@@ -170,32 +176,31 @@ extern WEAK void halide_use_jit_module();
 extern WEAK void halide_release_jit_module();
 
 template<typename T>
-__attribute__((always_inline)) void swap(T &a, T &b) {
+ALWAYS_INLINE void swap(T &a, T &b) {
     T t = a;
     a = b;
     b = t;
 }
 
 template<typename T>
-__attribute__((always_inline)) T max(const T &a, const T &b) {
+ALWAYS_INLINE T max(const T &a, const T &b) {
     return a > b ? a : b;
 }
 
 template<typename T>
-__attribute__((always_inline)) T min(const T &a, const T &b) {
+ALWAYS_INLINE T min(const T &a, const T &b) {
     return a < b ? a : b;
 }
 
 template<typename T, typename U>
-__attribute__((always_inline)) T reinterpret(const U &x) {
+ALWAYS_INLINE T reinterpret(const U &x) {
     T ret;
     memcpy(&ret, &x, min(sizeof(T), sizeof(U)));
     return ret;
 }
 
-extern WEAK __attribute__((always_inline)) int halide_malloc_alignment();
-
-extern WEAK __attribute__((always_inline)) void halide_abort();
+extern WEAK_INLINE int halide_malloc_alignment();
+extern WEAK_INLINE void halide_abort();
 
 void halide_thread_yield();
 
